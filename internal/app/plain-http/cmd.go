@@ -11,7 +11,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/Noiidor/go-service-template/internal/app/plain-http/config"
 	"github.com/Noiidor/go-service-template/internal/app/plain-http/server"
+	"github.com/Noiidor/go-service-template/internal/db/postgres"
 	"github.com/Noiidor/go-service-template/internal/repos"
 	"golang.org/x/sync/errgroup"
 )
@@ -27,12 +29,17 @@ func Run(stdout, stderr io.Writer) error {
 
 	// Services initialization goes here
 
-	// postgres, err := postgres.New(ctx)
-	// if err != nil {
-	// 	return err
-	// }
+	cfg, err := config.Load()
+	if err != nil {
+		return err
+	}
 
-	exampleRepo := repos.NewExampleRepo(nil)
+	postgres, err := postgres.New(ctx, cfg)
+	if err != nil {
+		return err
+	}
+
+	exampleRepo := repos.NewExampleRepo(postgres)
 	_ = exampleRepo
 
 	srv := server.NewServer(logger, nil)
@@ -66,7 +73,7 @@ func Run(stdout, stderr io.Writer) error {
 	}()
 
 	logger.Info("HTTP server started!")
-	err := eg.Wait()
+	err = eg.Wait()
 	logger.Info("Graceful shutdown complete!")
 	if err != nil {
 		logger.Info("Exit", "reason", err)

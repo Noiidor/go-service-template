@@ -3,6 +3,7 @@ module github.com/Noiidor/go-service-template
 go 1.22.6
 
 require (
+	github.com/caarlos0/env/v11 v11.2.2
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jmoiron/sqlx v1.4.0
 	golang.org/x/sync v0.8.0
