@@ -29,6 +29,7 @@ func Run(stdout, stderr io.Writer) error {
 
 	// Services initialization goes here
 
+	// Loads env variables to config
 	cfg, err := config.Load()
 	if err != nil {
 		return err
@@ -42,14 +43,14 @@ func Run(stdout, stderr io.Writer) error {
 	exampleRepo := repos.NewExampleRepo(postgres)
 	_ = exampleRepo
 
-	srv := server.NewServer(logger, nil)
+	srv := server.NewServer(logger, cfg)
 
 	httpServer := http.Server{
 		Handler: srv,
 		Addr:    net.JoinHostPort("", "5050"),
 	}
 
-	////
+	//// Graceful shutdown
 
 	eg, egCtx := errgroup.WithContext(ctx)
 

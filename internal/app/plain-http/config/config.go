@@ -13,7 +13,8 @@ type Config struct {
 }
 
 func Load() (*Config, error) {
-	return config.LoadStruct[*Config]()
+	cfg, err := config.LoadStruct[Config]()
+	return &cfg, err
 }
 
 func (c *Config) GetAppPlainHttpPort() uint16 {
