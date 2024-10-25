@@ -28,7 +28,7 @@ services:
         condition: service_healthy
     environment:
       - GOOSE_DRIVER=postgres
-      - GOOSE_DBSTRING=host=postgres port=${DB_PORT} user=${DB_USER} password=${DB_PASS} dbname=${DB_NAME}
+      - GOOSE_DBSTRING=host=${DB_HOST} port=${DB_PORT} user=${DB_USER} password=${DB_PASS} dbname=${DB_NAME}
     volumes:
       - ./migrations/postgres:/migrations
 
@@ -37,11 +37,14 @@ services:
     container_name: plain-http-service
     restart: unless-stopped
     command: ["/plain-http"]
+    env_file: .env
     ports:
       - ${APP_PLAIN_HTTP_PORT}:5050
     depends_on:
       postgres:
         condition: service_healthy
+      postgres-migrate:
+        condition: service_completed_successfully
 
 volumes:
   pgdata:
