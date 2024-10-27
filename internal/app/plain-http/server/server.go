@@ -4,7 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/Noiidor/go-service-template/internal/app/plain-http/config"
+	"github.com/Noiidor/go-service-template/internal/config"
 )
 
 func NewServer(

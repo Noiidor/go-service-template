@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/Noiidor/go-service-template/internal/app/plain-http/config"
+	"github.com/Noiidor/go-service-template/internal/config"
 	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )

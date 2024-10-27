@@ -11,8 +11,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Noiidor/go-service-template/internal/app/plain-http/config"
 	"github.com/Noiidor/go-service-template/internal/app/plain-http/server"
+	"github.com/Noiidor/go-service-template/internal/config"
 	"github.com/Noiidor/go-service-template/internal/db/postgres"
 	"github.com/Noiidor/go-service-template/internal/repos"
 	"golang.org/x/sync/errgroup"
