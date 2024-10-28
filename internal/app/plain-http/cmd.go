@@ -14,7 +14,7 @@ import (
 	"github.com/Noiidor/go-service-template/internal/app/plain-http/server"
 	"github.com/Noiidor/go-service-template/internal/config"
 	"github.com/Noiidor/go-service-template/internal/db/postgres"
-	"github.com/Noiidor/go-service-template/internal/repos"
+	postgresrepos "github.com/Noiidor/go-service-template/internal/repos/postgres"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -40,8 +40,8 @@ func Run(stdout, stderr io.Writer) error {
 		return err
 	}
 
-	exampleRepo := repos.NewExampleRepo(postgres)
-	_ = exampleRepo
+	wizardsRepo := postgresrepos.NewWizardsRepo(postgres)
+	_ = wizardsRepo
 
 	srv := server.NewServer(logger, cfg)
 
