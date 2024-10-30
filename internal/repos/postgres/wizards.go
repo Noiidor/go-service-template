@@ -66,15 +66,29 @@ func (r *wizardsRepo) CreateWizard(ctx context.Context, wizard *repos.Wizard) er
 	return err
 }
 
-func (r *wizardsRepo) UpdateWizard(ctx context.Context, wizard *repos.Wizard) error {
+func (r *wizardsRepo) UpdateWizard(ctx context.Context, id uint32, wizard *repos.UpdateWizard) (*repos.Wizard, error) {
 	const query = `
 		UPDATE wizards 
-		SET name = $1, specialization = $2 
-		WHERE id = $3;
+		SET 
+			name = COALESCE(:name, name), 
+			specialization = COALESCE(:specialization, specialization) 
+		WHERE id = $3
+		RETURNING id, name, specialization;
 	`
+	result := new(repos.Wizard)
 
-	_, err := r.db.NamedExecContext(ctx, query, wizard)
-	return err
+	rows, err := r.db.NamedQueryContext(ctx, query, wizard)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	err = rows.StructScan(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
 
 func (r *wizardsRepo) DeleteWizard(ctx context.Context, id uint32) error {
@@ -112,12 +126,29 @@ func (r *wizardsRepo) GetWizardStats(ctx context.Context, wizardID uint32) (*rep
 	return stats, nil
 }
 
-func (r *wizardsRepo) UpdateStats(ctx context.Context, wizardID uint32, stats *repos.WizardStats) error {
+func (r *wizardsRepo) UpdateStats(ctx context.Context, wizardID uint32, stats *repos.UpdateWizardStats) (*repos.WizardStats, error) {
 	const query = `
 		UPDATE wizard_stats
-		SET power = :power, mana = :mana, intelligence = :intelligence, luck = :luck
-		WHERE wizard_id = :wizard_id;
+		SET 
+			power = COALESCE(:power, power), 
+			mana = COALESCE(:mana, mana), 
+			intelligence = COALESCE(:intelligence, intelligence), 
+			luck = COALESCE(:luck, luck)
+		WHERE wizard_id = :wizard_id
+		RETURNING wizard_id, power, mana, intelligence, luck;
 	`
-	_, err := r.db.NamedExecContext(ctx, query, stats)
-	return err
+	result := new(repos.WizardStats)
+
+	rows, err := r.db.NamedQueryContext(ctx, query, stats)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	err = rows.StructScan(result)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }

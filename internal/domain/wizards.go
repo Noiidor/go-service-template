@@ -6,10 +6,22 @@ type Wizard struct {
 	Specialization string `json:"specialization"`
 }
 
+type UpdateWizard struct {
+	Name           *string `json:"name"`
+	Specialization *string `json:"specialization"`
+}
+
 type WizardStats struct {
 	WizardID     uint32 `json:"wizardId"`
 	Power        int32  `json:"power"`
 	Mana         int32  `json:"mana"`
 	Intelligence int32  `json:"intelligence"`
 	Luck         int32  `json:"luck"`
+}
+
+type UpdateWizardStats struct {
+	Power        *int32 `json:"power"`
+	Mana         *int32 `json:"mana"`
+	Intelligence *int32 `json:"intelligence"`
+	Luck         *int32 `json:"luck"`
 }
