@@ -2,7 +2,10 @@ package config
 
 import "github.com/Noiidor/go-service-template/pkg/config"
 
+// Exported fields needed for env loader
 type Config struct {
+	AppHost string `env:"APP_HOST"`
+
 	AppPlainHttpPort uint16 `env:"APP_PLAIN_HTTP_PORT,notEmpty"`
 
 	DbHost string `env:"DB_HOST,notEmpty"`
@@ -15,6 +18,10 @@ type Config struct {
 func Load() (*Config, error) {
 	cfg, err := config.LoadStruct[Config]()
 	return &cfg, err
+}
+
+func (c *Config) GetAppHost() string {
+	return c.AppHost
 }
 
 func (c *Config) GetAppPlainHttpPort() uint16 {

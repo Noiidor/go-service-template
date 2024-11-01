@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+	"fmt"
+	"log/slog"
+	"os"
 
 	"github.com/Noiidor/go-service-template/internal/domain"
 	"github.com/Noiidor/go-service-template/internal/repos"
@@ -20,11 +23,15 @@ type WizardsService interface {
 }
 
 type wizardsService struct {
+	log  *slog.Logger
 	repo repos.WizardsRepo
 }
 
-func NewWizardsService() *wizardsService {
-	return &wizardsService{}
+func NewWizardsService(logger *slog.Logger, repo repos.WizardsRepo) *wizardsService {
+	return &wizardsService{
+		log:  logger,
+		repo: repo,
+	}
 }
 
 func (s *wizardsService) GetByID(ctx context.Context, id uint32) (*domain.Wizard, error) {
@@ -56,7 +63,9 @@ func (s *wizardsService) Create(ctx context.Context, wizard *domain.Wizard) erro
 
 	err := s.repo.CreateWizard(ctx, wiz)
 
-	wizard = wiz.ToDomain() // is this a good idea?
+	fmt.Fprintf(os.Stderr, "wiz after create: %+v", wiz)
+
+	wizard.ID = wiz.ID
 
 	return err
 }

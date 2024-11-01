@@ -4,8 +4,6 @@ import (
 	"context"
 	"io"
 	"log/slog"
-	"net"
-	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
@@ -15,6 +13,7 @@ import (
 	"github.com/Noiidor/go-service-template/internal/config"
 	"github.com/Noiidor/go-service-template/internal/db/postgres"
 	postgresrepos "github.com/Noiidor/go-service-template/internal/repos/postgres"
+	"github.com/Noiidor/go-service-template/internal/service"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -43,25 +42,22 @@ func Run(stdout, stderr io.Writer) error {
 	wizardsRepo := postgresrepos.NewWizardsRepo(postgres)
 	_ = wizardsRepo
 
-	srv := server.NewServer(logger, cfg)
+	wizardService := service.NewWizardsService(logger, wizardsRepo)
 
-	httpServer := http.Server{
-		Handler: srv,
-		Addr:    net.JoinHostPort("", "5050"),
-	}
+	server := server.NewServer(ctx, logger, cfg, wizardService)
 
 	//// Graceful shutdown
 
 	eg, egCtx := errgroup.WithContext(ctx)
 
-	eg.Go(httpServer.ListenAndServe)
+	eg.Go(server.ListenAndServe)
 	eg.Go(func() error {
 		<-egCtx.Done()
 
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownTimeout*time.Second)
 		defer cancel()
 
-		return httpServer.Shutdown(shutdownCtx)
+		return server.Shutdown(shutdownCtx)
 	})
 
 	go func() {
