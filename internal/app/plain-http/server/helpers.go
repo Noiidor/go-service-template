@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func encodeResponse[T any](w http.ResponseWriter, r *http.Request, status int, v T) error {
+func encodeResponse[T any](w http.ResponseWriter, status int, v T) error {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 
@@ -24,4 +24,19 @@ func decodeRequestBody[T any](r *http.Request) (T, error) {
 	}
 
 	return v, nil
+}
+
+func responseError(w http.ResponseWriter, err error, code int) {
+	type httpError struct {
+		Error string `json:"error"`
+	}
+
+	serverError := httpError{
+		Error: err.Error(),
+	}
+
+	if encodeErr := encodeResponse(w, code, serverError); encodeErr != nil {
+		panic(encodeErr)
+	}
+
 }

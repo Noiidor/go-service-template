@@ -8,13 +8,17 @@ CREATE TABLE wizards (
     specialization TEXT NOT NULL DEFAULT ''
 );
 
+CREATE INDEX ON idx_wizards_id ON wizards(id)
+
 CREATE TABLE wizard_stats (
-    wizard_id INT REFERENCES wizards(id) PRIMARY KEY,
+    wizard_id INT REFERENCES wizards(id) ON DELETE CASCADE PRIMARY KEY,
     power INT NOT NULL DEFAULT 0,
     mana INT NOT NULL DEFAULT 0,
     intelligence INT NOT NULL DEFAULT 0,
     luck INT NOT NULL DEFAULT 0
 );
+
+CREATE INDEX ON idx_wizard_stats_wizard_id ON wizard_stats(wizard_id)
 
 -- +goose Down
 SELECT

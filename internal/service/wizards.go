@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log/slog"
 	"os"
@@ -65,7 +66,12 @@ func (s *wizardsService) Create(ctx context.Context, wizard *domain.Wizard) erro
 
 	fmt.Fprintf(os.Stderr, "wiz after create: %+v", wiz)
 
-	wizard.ID = wiz.ID
+	*wizard = *wiz.ToDomain()
+
+	// TODO: replace to assert
+	if wizard.ID == 0 {
+		return errors.New("wizard ID cannot be 0")
+	}
 
 	return err
 }
