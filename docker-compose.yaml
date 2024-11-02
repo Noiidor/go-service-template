@@ -32,14 +32,14 @@ services:
     volumes:
       - ./migrations/postgres:/migrations
 
-  plain-http:
+  wizards-rest:
     build: .
-    container_name: plain-http-service
+    container_name: wizards-rest-service
     restart: unless-stopped
-    command: ["/plain-http"]
+    command: ["/wizards-rest"]
     env_file: .env
     ports:
-      - ${APP_PLAIN_HTTP_PORT}:5050
+      - ${APP_WIZARDS_REST_PORT}:5050
     depends_on:
       postgres:
         condition: service_healthy

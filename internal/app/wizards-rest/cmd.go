@@ -1,4 +1,4 @@
-package plainhttp
+package wizardsrest
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/Noiidor/go-service-template/internal/app/plain-http/server"
+	"github.com/Noiidor/go-service-template/internal/app/wizards-rest/server"
 	"github.com/Noiidor/go-service-template/internal/config"
 	"github.com/Noiidor/go-service-template/internal/db/postgres"
 	postgresrepos "github.com/Noiidor/go-service-template/internal/repos/postgres"

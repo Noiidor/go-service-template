@@ -6,7 +6,7 @@ import "github.com/Noiidor/go-service-template/pkg/config"
 type Config struct {
 	AppHost string `env:"APP_HOST"`
 
-	AppPlainHttpPort uint16 `env:"APP_PLAIN_HTTP_PORT,notEmpty"`
+	AppWizardsRestPort uint16 `env:"APP_WIZARDS_REST_PORT,notEmpty"`
 
 	DbHost string `env:"DB_HOST,notEmpty"`
 	DbPort uint16 `env:"DB_PORT,notEmpty"`
@@ -24,8 +24,8 @@ func (c *Config) GetAppHost() string {
 	return c.AppHost
 }
 
-func (c *Config) GetAppPlainHttpPort() uint16 {
-	return c.AppPlainHttpPort
+func (c *Config) GetAppWizardsRestPort() uint16 {
+	return c.AppWizardsRestPort
 }
 
 func (c *Config) GetDbName() string {

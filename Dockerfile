@@ -8,11 +8,11 @@ RUN go mod download
 
 COPY . ./
 
-RUN go build -v -o /plain-http ./cmd/plain-http
+RUN go build -v -o /wizards-rest ./cmd/wizards-rest
 
 FROM alpine:3.20 as run
 
-COPY --from=build /plain-http /plain-http
+COPY --from=build /wizards-rest /wizards-rest
 
 WORKDIR /app
-CMD ["/plain-http"]
+CMD ["/wizards-rest"]

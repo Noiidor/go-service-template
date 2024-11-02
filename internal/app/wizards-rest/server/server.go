@@ -42,7 +42,7 @@ func NewServer(
 	server.server = &http.Server{
 		Addr: net.JoinHostPort(
 			cfg.GetAppHost(),
-			strconv.FormatUint(uint64(cfg.GetAppPlainHttpPort()), 10),
+			strconv.FormatUint(uint64(cfg.GetAppWizardsRestPort()), 10),
 		),
 		Handler:           mux,
 		ReadHeaderTimeout: 3 * time.Second,
